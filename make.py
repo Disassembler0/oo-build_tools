@@ -55,7 +55,7 @@ if ("1" == config.option("update")):
   base.git_update("desktop-sdk")
   base.git_update("dictionaries")
 
-  if config.check_option("module", "builder"):
+  if config.check_option("module", "builder") or config.check_option("module", "server"):
     base.git_update("DocumentBuilder")
 
   if config.check_option("module", "desktop"):
