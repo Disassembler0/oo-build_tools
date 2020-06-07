@@ -1,5 +1,33 @@
 # build_tools
 
+## Disassembler's build notes
+
+**Note:** Full build is needed in order to raise the default connection limit (25). To just get the mobile editors working again, *web-apps* can be patched without full rebuild. See my notes in https://github.com/Disassembler0/oo-web-apps/.
+
+```
+# Prepare environment
+lxc init ubuntu:14.04 onlyoffice
+lxc start onlyoffice
+lxc exec onlyoffice -- bash
+
+# Install tools
+apt-get -y update
+apt-get -y install --no-install-recommends ca-certificates git python sudo
+
+# Create build user
+# Needed because some tar archives attempt to preserve owner
+# with too high UID when extracted under root in unprivileged container
+adduser --disabled-password --gecos "" build
+echo 'build ALL=(ALL) NOPASSWD: ALL' >/etc/sudoers.d/build
+chmod 440 /etc/sudoers.d/build
+su - build
+
+# Clone repo and run build script
+git clone https://github.com/Disassembler0/oo-build_tools.git build_tools
+cd build_tools/tools/linux
+time ./automate.py server
+```
+
 ## Overview
 
 **build_tools** allow you to automatically get and install all the components
